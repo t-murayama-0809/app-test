@@ -299,6 +299,7 @@ with col3:
 
 with st.expander("残価表"):
     try:
+        df3 = df3.dropna(subset=['clr_adjusted_price'])
         df3['新車価格'] = (df3['max_price'] / 1000).fillna(0).round(0).astype(int)
         df3 = df3[df3['新車価格'] != 0]
         #df3['clr_adjusted_price'] = df3['clr_adjusted_price'].round(0).astype(int)
