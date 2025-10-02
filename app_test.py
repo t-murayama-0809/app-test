@@ -371,7 +371,7 @@ with st.expander("残価表"):
         df3_1['weighted_price'] = df3_1['weighted_price'].apply(lambda x: int(x) if pd.notna(x) else None)
         fig_scatter7 = px.line(df3_1,
                                x='nenss',
-                               y='clr_adjusted_price',
+                               y='weighted_price',
                                #text = 'price',
                                markers=True ,
                                color='gradesei',
