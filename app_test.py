@@ -300,19 +300,19 @@ with st.expander("残価表"):
         df3 = df3[df3['新車価格'] != 0]
         
         # --- 切替ボタン ---
-        mode = st.radio("price：（千円）、salvage_rate：（%）", ["price", "SV"], horizontal=True)
+        mode = st.radio("price：（千円）、salvage_rate：（%）", ["clr_adjusted_price", "SV"], horizontal=True)
 
         # --- ピボットテーブル作成 ---
         #pivot_table = pd.pivot_table(df3,values='price' if mode == "price" else 'RV',index=['grade','新車価格'],columns='nenss',aggfunc=lambda x:str(int(round(x.mean() * ratio ,0))))
         # --- ピボットテーブル作成 ---
         pivot_table = pd.pivot_table(
             df3,
-            values='price' if mode == "price" else 'SV',
+            values='clr_adjusted_price' if mode == "clr_adjusted_price" else 'SV',
             index=['gradesei','新車価格'],
             columns='nenss',
             aggfunc=lambda x: str(int(weighted_mean_by_date(
                 x, df3,
-                value_col='price' if mode == "price" else 'SV',
+                value_col='clr_adjusted_price' if mode == "clr_adjusted_price" else 'SV',
                 date_col="aaymd",
                 ratio=ratio,
                 decay=0.98  # ← ここを調整すると「直近の効き具合」が変わる
@@ -349,11 +349,11 @@ with st.expander("残価表"):
         pass
     
     try:
-        df3_1 = df3[['gradesei','nenss','price']].groupby(['gradesei','nenss'],as_index=False).mean() #*ratio 
-        df3_1['price'] = df3_1['price'].astype(int)
+        df3_1 = df3[['gradesei','nenss','clr_adjusted_price']].groupby(['gradesei','nenss'],as_index=False).mean() #*ratio 
+        df3_1['clr_adjusted_price'] = df3_1['clr_adjusted_price'].astype(int)
         fig_scatter7 = px.line(df3_1,
                                x='nenss',
-                               y='price',
+                               y='clr_adjusted_price',
                                #text = 'price',
                                markers=True ,
                                color='grade',
