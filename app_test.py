@@ -360,7 +360,7 @@ with st.expander("残価表"):
                                y='clr_adjusted_price',
                                #text = 'price',
                                markers=True ,
-                               color='grade',
+                               color='gradesei',
                                title='残価チャート：ver0.8',
                                line_shape='spline'
                                )
@@ -375,6 +375,6 @@ with st.expander("残価表"):
             )
         st.plotly_chart(fig_scatter7)
     except:
-        pass
+        st.error(f"残価チャートエラー：{e}")
     
     
