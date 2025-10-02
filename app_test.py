@@ -314,13 +314,13 @@ with st.expander("残価表"):
             values='clr_adjusted_price' if mode == "clr_adjusted_price" else 'SV',
             index=['gradesei','新車価格'],
             columns='nenss',
-            aggfunc=lambda x: str(weighted_mean_by_date(
+            aggfunc=lambda x: weighted_mean_by_date(
                 x, df3,
                 value_col='clr_adjusted_price' if mode == "clr_adjusted_price" else 'SV',
                 date_col="aaymd",
                 ratio=ratio,
                 decay=0.98  # ← ここを調整すると「直近の効き具合」が変わる
-                ))
+                )
             )
         pivot_table = pivot_table.fillna("")
         pivot_table_sorted = pivot_table.sort_values(by='nenss', axis=1, ascending=False)
