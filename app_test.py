@@ -374,7 +374,7 @@ with st.expander("残価表"):
                 )
             )
         st.plotly_chart(fig_scatter7)
-    except:
+    except Exception as e:
         st.error(f"残価チャートエラー：{e}")
     
     
