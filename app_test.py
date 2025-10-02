@@ -301,22 +301,22 @@ with st.expander("残価表"):
     try:
         df3['新車価格'] = (df3['max_price'] / 1000).fillna(0).round(0).astype(int)
         df3 = df3[df3['新車価格'] != 0]
-        
+        #df3['clr_adjusted_price'] = df3['clr_adjusted_price'].round(0).astype(int)
         
         # --- 切替ボタン ---
-        mode = st.radio("price：（千円）、salvage_rate：（%）", ["price", "SV"], horizontal=True)
+        mode = st.radio("price：（千円）、salvage_rate：（%）", ["clr_adjusted_price", "SV"], horizontal=True)
 
         # --- ピボットテーブル作成 ---
         #pivot_table = pd.pivot_table(df3,values='price' if mode == "price" else 'RV',index=['grade','新車価格'],columns='nenss',aggfunc=lambda x:str(int(round(x.mean() * ratio ,0))))
         # --- ピボットテーブル作成 ---
         pivot_table = pd.pivot_table(
             df3,
-            values='price' if mode == "price" else 'SV',
+            values='clr_adjusted_price' if mode == "clr_adjusted_price" else 'SV',
             index=['gradesei','新車価格'],
             columns='nenss',
             aggfunc=lambda x: weighted_mean_by_date(
                 x, df3,
-                value_col='price' if mode == "price" else 'SV',
+                value_col='clr_adjusted_price' if mode == "clr_adjusted_price" else 'SV',
                 date_col="aaymd",
                 ratio=ratio,
                 decay=0.98  # ← ここを調整すると「直近の効き具合」が変わる
