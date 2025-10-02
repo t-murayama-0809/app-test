@@ -147,44 +147,44 @@ except:
     st.warning("JSON階層選択エラー")
     
 # --- CSVフィルタリング ---
-if brandna and syameisei and katashiki:
-    try:
-        df3 = df[
-            (df['brandna'] == brandna) &
-            (df['syameisei'] == syameisei) &
-            (df['katashiki'] == katashiki)
-        ]
-    except:
-        df3 = pd.DataFrame()
+#if brandna and syameisei and katashiki:
+try:
+    df3 = df[
+        (df['brandna'] == brandna) &
+        (df['syameisei'] == syameisei) &
+        (df['katashiki'] == katashiki)
+    ]
+except:
+    st.warning("dfエラー")
     
     
 # --- CSVフィルタリング ---
-if brandna and syameisei and katashiki and gradesei and nenss:
-    try:
-        df45 = df[
-            (df['brandna'] == brandna) &
-            (df['syameisei'] == syameisei) &
-            (df['katashiki'] == katashiki) &
-            (df['gradesei'] == gradesei) &
-            (df['nenss'] == int(nenss))
-        ]
-    except:
-        df45 = pd.DataFrame()
+#if brandna and syameisei and katashiki and gradesei and nenss:
+try:
+    df45 = df[
+        (df['brandna'] == brandna) &
+        (df['syameisei'] == syameisei) &
+        (df['katashiki'] == katashiki) &
+        (df['gradesei'] == gradesei) &
+        (df['nenss'] == int(nenss))
+    ]
+except:
+    st.warning("dfエラー")
     
 # --- CSVフィルタリング ---
-if brandna and syameisei and katashiki and gradesei and nenss and clrmona and hyoka:
-    try:
-        df6 = df[
-            (df['brandna'] == brandna) &
-            (df['syameisei'] == syameisei) &
-            (df['katashiki'] == katashiki) &
-            (df['gradesei'] == gradesei) &
-            (df['nenss'] == int(nenss)) &
-            (df['clrmona'] == clrmona) &
-            (df['hyoka'] == hyoka)
-        ]
-    except:
-        df6 = pd.DataFrame()
+#if brandna and syameisei and katashiki and gradesei and nenss and clrmona and hyoka:
+try:
+    df6 = df[
+        (df['brandna'] == brandna) &
+        (df['syameisei'] == syameisei) &
+        (df['katashiki'] == katashiki) &
+        (df['gradesei'] == gradesei) &
+        (df['nenss'] == int(nenss)) &
+        (df['clrmona'] == clrmona) &
+        (df['hyoka'] == hyoka)
+    ]
+except:
+    st.warning("dfエラー")
     
 # --- 走行距離スライダー ---
 try:
@@ -238,8 +238,8 @@ try:
     df8['std'] = df8['price_ave'].rolling(window=window_size).std()
     df8['up_b'] = df8['MA'] + (2 * df8['std'])
     df8['lo_b'] = df8['MA'] - (2 * df8['std'])
-    fig_scatter = go.Scatter(x=df45['aaymd'], y=df45['price'], mode='markers', name='Near', marker=dict(color='white'),customdata=df45[['hyoka','clrnm','distance']],hovertemplate='<b>開催年月日:</b> %{x}<br><b>評価点:</b> %{customdata[0]} 点<br><b>ボディカラー:</b> %{customdata[1]}<br><b>走行距離:</b> %{customdata[2]} km<br><b>落札価格:</b> %{y} 千円<extra></extra>')
-    fig_scatter2 = go.Scatter(x=df7['aaymd'], y=df7['price'], mode='markers', name='Equal', marker=dict(color='orange'),customdata=df7[['hyoka','clrnm','distance']],hovertemplate='<b>開催年月日:</b> %{x}<br><b>評価点:</b> %{customdata[0]} 点<br><b>ボディカラー:</b> %{customdata[1]}<br><b>走行距離:</b> %{customdata[2]} km<br><b>落札価格:</b> %{y} 千円<extra></extra>')
+    fig_scatter = go.Scatter(x=df45['aaymd'], y=df45['price'], mode='markers', name='Near', marker=dict(color='white'),customdata=df45[['hyoka','clrmona','distance']],hovertemplate='<b>開催年月日:</b> %{x}<br><b>評価点:</b> %{customdata[0]} 点<br><b>ボディカラー:</b> %{customdata[1]}<br><b>走行距離:</b> %{customdata[2]} km<br><b>落札価格:</b> %{y} 千円<extra></extra>')
+    fig_scatter2 = go.Scatter(x=df7['aaymd'], y=df7['price'], mode='markers', name='Equal', marker=dict(color='orange'),customdata=df7[['hyoka','clrmona','distance']],hovertemplate='<b>開催年月日:</b> %{x}<br><b>評価点:</b> %{customdata[0]} 点<br><b>ボディカラー:</b> %{customdata[1]}<br><b>走行距離:</b> %{customdata[2]} km<br><b>落札価格:</b> %{y} 千円<extra></extra>')
     fig_scatter3 = go.Scatter(x=df8['aaym'], y=df8['MA'], mode='lines', name=f'{window_size}日移動平均落札', line=dict(color='red', shape='spline'))
     fig_scatter4 = go.Scatter(x=df8['aaym'], y=df8['EMA'], mode='lines', name=f'{window_size}日指数平滑移動平均落札', line=dict(color='green', shape='spline'))
     fig_scatter5 = go.Scatter(x=df8['aaym'], y=df8['up_b'], mode='lines', name='upper_band', line=dict(color='blue', shape='spline'))
@@ -258,8 +258,12 @@ try:
     fig.update_layout(xaxis=dict(tickformat="%Y-%m-%d"),
                       legend=dict(x=0.01,y=0.99,xanchor='left',yanchor='top',orientation='h',)) # 例: 西暦4桁、月2桁、日2桁
     st.plotly_chart(fig)
-except:
-    pass
+except Exception as e:
+    st.error(f"グラフ描画エラー: {e}")
+    st.write("df7列:", df7.columns.tolist())
+    st.write("df45列:", df45.columns.tolist())
+    st.write("df7件数:", len(df7))
+    st.write("df45件数:", len(df45))
 
 
 st.sidebar.markdown("## Settings:残価表")
