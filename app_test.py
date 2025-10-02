@@ -298,7 +298,7 @@ with st.expander("残価表"):
     try:
         df3['新車価格'] = (df3['max_price'] / 1000).fillna(0).round(0).astype(int)
         df3 = df3[df3['新車価格'] != 0]
-        df3['clr_adjusted_price'] = df3['clr_adjusted_price'].fillna(0).round(0).astype(int)
+        df3['clr_adjusted_price'] = df3['clr_adjusted_price'].round(0).astype(int)
         
         # --- 切替ボタン ---
         mode = st.radio("price：（千円）、salvage_rate：（%）", ["clr_adjusted_price", "SV"], horizontal=True)
