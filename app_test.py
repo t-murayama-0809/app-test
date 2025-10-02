@@ -284,6 +284,9 @@ def weighted_mean_by_date(x, df, value_col, date_col="aaymd", ratio=1.0, decay=0
         return None
 
     w_avg = np.average(sub_df[value_col], weights=sub_df["weight"]) * ratio
+    # NaNや無限大をチェック
+    if pd.isna(w_avg) or np.isinf(w_avg):
+        return None  # ここを None にしておくと st.dataframe で安全
     return int(round(w_avg, 0))
 
 col3, col4 = st.columns(2)
