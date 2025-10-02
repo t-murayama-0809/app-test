@@ -353,6 +353,7 @@ with st.expander("残価表"):
         pass
     
     try:
+        df3 = df3.dropna(subset=['clr_adjusted_price'])
         df3_1 = df3[['gradesei','nenss','clr_adjusted_price']].groupby(['gradesei','nenss'],as_index=False).mean() #*ratio 
         df3_1['clr_adjusted_price'] = df3_1['clr_adjusted_price'].astype(int)
         fig_scatter7 = px.line(df3_1,
