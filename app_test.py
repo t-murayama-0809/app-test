@@ -144,7 +144,7 @@ try:
     hyoka = st.sidebar.selectbox("外装評価点", hyoka_list, index = None, placeholder="選択してください")
 
 except:
-    st.warning("JSON階層選択エラー")
+    st.warning("アルファードを選択してください")
     
 # --- CSVフィルタリング ---
 #if brandna and syameisei and katashiki:
@@ -155,7 +155,7 @@ try:
         (df['katashiki'] == katashiki)
     ]
 except:
-    st.warning("dfエラー")
+    pass
     
     
 # --- CSVフィルタリング ---
@@ -169,7 +169,7 @@ try:
         (df['nenss'] == int(nenss))
     ]
 except:
-    st.warning("dfエラー")
+    pass
     
 # --- CSVフィルタリング ---
 #if brandna and syameisei and katashiki and gradesei and nenss and clrmona and hyoka:
@@ -184,7 +184,7 @@ try:
         (df['hyoka'] == hyoka)
     ]
 except:
-    st.warning("dfエラー")
+    pass
     
 # --- 走行距離スライダー ---
 try:
@@ -258,12 +258,8 @@ try:
     fig.update_layout(xaxis=dict(tickformat="%Y-%m-%d"),
                       legend=dict(x=0.01,y=0.99,xanchor='left',yanchor='top',orientation='h',)) # 例: 西暦4桁、月2桁、日2桁
     st.plotly_chart(fig)
-except Exception as e:
-    st.error(f"グラフ描画エラー: {e}")
-    st.write("df7列:", df7.columns.tolist())
-    st.write("df45列:", df45.columns.tolist())
-    st.write("df7件数:", len(df7))
-    st.write("df45件数:", len(df45))
+except:
+    pass
 
 
 st.sidebar.markdown("## Settings:残価表")
