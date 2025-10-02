@@ -353,9 +353,22 @@ with st.expander("残価表"):
         pass
     
     try:
+        # 欠損 clr_adjusted_price を除外
         df3 = df3.dropna(subset=['clr_adjusted_price'])
-        df3_1 = df3[['gradesei','nenss','clr_adjusted_price']].groupby(['gradesei','nenss'],as_index=False).mean() #*ratio 
-        df3_1['clr_adjusted_price'] = df3_1['clr_adjusted_price'].astype(int)
+
+        # 加重平均を計算して新しい列に反映
+        df3['weighted_price'] = df3.groupby(['gradesei','nenss'])['clr_adjusted_price'].transform(
+            lambda x: weighted_mean_by_date(x, df3, value_col='clr_adjusted_price', date_col='aaymd', ratio=ratio, decay=0.98)
+        )
+
+        # None は np.nan に置換して後で整数化
+        df3['weighted_price'] = df3['weighted_price'].replace({None: np.nan})
+
+        # グループ化して平均（None は無視）
+        df3_1 = df3.groupby(['gradesei','nenss'], as_index=False)['weighted_price'].mean()
+
+        # float → int に変換（nan は無視）
+        df3_1['weighted_price'] = df3_1['weighted_price'].apply(lambda x: int(x) if pd.notna(x) else None)
         fig_scatter7 = px.line(df3_1,
                                x='nenss',
                                y='clr_adjusted_price',
